@@ -26,26 +26,32 @@ data_visualizationServer <- function(id) {
     # check analysis report data format
     ## TO ADD
     
-    # check sinlge-cell file matches analysis report file
-    ## TO ADD
-    
     # Show upload error messages ----------------------------------------------
     output$upload_message <- renderText({
+      
+      # check sinlge-cell file matches analysis report file
+      if (sort(unique(single_cell_data_df()$plate)) != sort(unique(analysis_report_df()$plate))) {
+        validate(
+          paste(
+            "ERROR: mismatch between Single Cell Data and Analysis Report files
+          
+          Ensure to load single cell and analysis report files generated from the same plate(s)"
+          )
+        )
+      }
+      
+      # show graph control widgets and example graphs
+      shinyjs::show("graphs_control_widgets") # show after clicking Next
+      shinyjs::show("example_graphs")
+      
       # return empty text if all good
       ""
     }) %>%
-      bindEvent(names(analysis_report_df()),
-                names(single_cell_data_df()))
+      bindEvent(input$next_button)
     
     # Graphs control widgets handler ----------------------------------------------
     shinyjs::hide("graphs_control_widgets") # hide by default
     shinyjs::hide("example_graphs")
-    
-    observe({
-      shinyjs::show("graphs_control_widgets") # show after clicking Next
-      shinyjs::show("example_graphs")
-    }) %>%
-      bindEvent(input$next_button)
     
     observe({
       shinyjs::hide("graphs_control_widgets") # hide if analysis report or single cell data change
@@ -402,9 +408,83 @@ data_visualizationServer <- function(id) {
     }) %>%
       bindEvent(input$analysis_report_df$datapath, input$single_cell_data_df$datapath)
     
+    # Download all graphs button ----------------------------------------------
     
+    output$download_all_graphs <- downloadHandler(
+      filename = function() {
+        paste0("FAST.R_graphs_", Sys.Date(), ".zip")
+      },
+      
+      content = function(file) {
+        
+        temp_directory <- file.path(tempdir(), as.integer(Sys.time()))
+        dir.create(temp_directory)
+        
+        # single cell SABGal EdU
+        grDevices::png(file.path(temp_directory, "single_cell_SABGal_EdU_staining.png"),
+                       width = get_dim(dims_plot(), "width", "dpi_adj"),
+                       height = get_dim(dims_plot(), "height", "dpi_adj"),
+                       res = input$dpi)
+        print(graphs()$single_cell_SABGal_EdU_staining)
+        grDevices::dev.off()
+        
+        # percentages
+        grDevices::png(file.path(temp_directory, "percentages.png"),
+                       width = get_dim(dims_plot(), "width_percentages", "dpi_adj"),
+                       height = get_dim(dims_plot(), "height_percentages", "dpi_adj"),
+                       res = input$dpi)
+        print(graphs()$percentages)
+        grDevices::dev.off()
+        
+        # median_SABGal_EdU_staining
+        grDevices::png(file.path(temp_directory, "median_SABGal_EdU_staining.png"),
+                       width = get_dim(dims_plot(), "width", "dpi_adj"),
+                       height = get_dim(dims_plot(), "height", "dpi_adj"),
+                       res = input$dpi)
+        print(graphs()$median_SABGal_EdU_staining)
+        grDevices::dev.off()
+        
+        # well percentages
+        grDevices::png(file.path(temp_directory, "well_percentages.png"),
+                       width = get_dim(dims_plot(), "width", "dpi_adj"),
+                       height = get_dim(dims_plot(), "height", "dpi_adj"),
+                       res = input$dpi)
+        print(graphs()$well_percentages)
+        grDevices::dev.off()
+        
+        # Comparison plots
+        if (input$generate_comparison_graphs == TRUE) {
+          
+          # median SABGal EdU staining comparison
+          grDevices::png(file.path(temp_directory, "median_SABGal_EdU_staining_comparison.png"),
+                         width = get_dim(dims_plot(), "width_comparison", "dpi_adj"),
+                         height = get_dim(dims_plot(), "height_comparison", "dpi_adj"),
+                         res = input$dpi)
+          print(graphs()$median_SABGal_EdU_staining_comparison)
+          grDevices::dev.off()
+          
+          # well percentages comparison
+          grDevices::png(file.path(temp_directory, "well_percentages_comparison.png"),
+                         width = get_dim(dims_plot(), "width_comparison", "dpi_adj"),
+                         height = get_dim(dims_plot(), "height_comparison", "dpi_adj"),
+                         res = input$dpi)
+          print(graphs()$well_percentages_comparison)
+          grDevices::dev.off()
+          
+        } 
+        
+        
+        zip::zip(
+          zipfile = file,
+          files = dir(temp_directory),
+          root = temp_directory
+        )
+        
+      },
+      contentType = "application/zip"
+    )
     
-    # Render and download button for all graphs -----------------------------------------------------------
+    # Render and download buttons for all graphs -----------------------------------------------------------
     
     # single cell SABGal EdU
     output$single_cell_SABGal_EdU_staining <- renderPlot({ # plot

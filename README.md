@@ -1,12 +1,14 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# FAST.R
+# FAST.R <a href="https://f-neri.github.io/FAST.R/"><img src="man/figures/logo.png" align="right" height="138" alt="FAST.R website" /></a>
 
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/f-neri/FAST.R/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/f-neri/FAST.R/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
+
+## Overview
 
 The goal of FAST.R is to launch a user-friendly R shiny app to perform
 the data analysis and visualization for the Fully Automated Senescence
