@@ -1,6 +1,6 @@
-c2954e27bbb6a21cd29579e21188689d *DESCRIPTION
+01f21b340daca713bba8e33f9ea24379 *DESCRIPTION
 d75e1fd9e468a60207a01c886e70e7e0 *NAMESPACE
-75210a3c581e5b8ca10fd348fed817f6 *NEWS.md
+3c092672dad54b86d7dd9d070a5da235 *NEWS.md
 4e69ef2f421600cda694d25f64c0b579 *R/analyze_single_cell_data.R
 34de0c412d117b3fd01344867272f41a *R/app.R
 1bd1a5e5201769cd056c65326d775f59 *R/check_IAoutput_has_metadata.R
@@ -14,7 +14,7 @@ dc9efa3d7302ff97f8a31b823c278a83 *R/check_variables_match_across_dfs.R
 be04d16507b0124dc53a757e29e4a0d2 *R/example_dataServer.R
 0c219574717e44beb83e80639da81e91 *R/example_dataUI.R
 9167027c34d925dcbc53ac8059dc127e *R/generate_df_thresholds.R
-819dd18c5def0a7f6fce00f3a1a348fb *R/generate_single_cell_df.R
+69e0f2e3029fd6dc6dc0f92590c43fa6 *R/generate_single_cell_df.R
 f2f451d3ac1930799e8dfa7719213456 *R/get_dim.R
 f321e66e63c87eb1bd1c8045393e2bf5 *R/hide_show_multiple_ids.R
 6c83b55de861c91d1fae3866025b13a9 *R/load_input_files.R
